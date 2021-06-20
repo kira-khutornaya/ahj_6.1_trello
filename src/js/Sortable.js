@@ -32,6 +32,30 @@ export default class Sortable {
     this.draggedElement.style.left = `${event.pageX - this.draggedX}px`;
     this.draggedElement.style.top = `${event.pageY - this.draggedY}px`;
   }
+  onFinishDrag(event) {
+    if (!this.draggedElement) return;
+    if (!event.target.closest('.cardmanager-col__list')) {
+      this.onStopDrag();
+      return;
+    }
+
+    this.targetPlace.replaceWith(this.target);
+    this.onStopDrag();
+    this.collectItems();
+  }
+
+  onStopDrag() {
+    this.target.style.display = 'block';
+    this.draggedElement.remove();
+    this.draggedElement = null;
+    this.draggedX = null;
+    this.draggedY = null;
+    this.targetPlace = null;
+    document.removeEventListener('mousemove', this.dragMove);
+    this.columns.forEach((col) => col.removeEventListener('mousemove', this.takePlace));
+    this.columns.forEach((col) => col.removeEventListener('mouseleave', this.removePlace));
+    document.removeEventListener('mouseup', this.dragFinish);
+  }
 
   takePlace(event) {
     if (!this.draggedElement) return;
@@ -62,30 +86,5 @@ export default class Sortable {
       this.targetPlace.remove();
       this.targetPlace = null;
     }
-  }
-
-  onFinishDrag(event) {
-    if (!this.draggedElement) return;
-    if (!event.target.closest('.cardmanager-col__list')) {
-      this.onStopDrag();
-      return;
-    }
-
-    this.targetPlace.replaceWith(this.target);
-    this.onStopDrag();
-    this.collectItems();
-  }
-
-  onStopDrag() {
-    this.target.style.display = 'block';
-    this.draggedElement.remove();
-    this.draggedElement = null;
-    this.draggedX = null;
-    this.draggedY = null;
-    this.targetPlace = null;
-    document.removeEventListener('mousemove', this.dragMove);
-    this.columns.forEach((col) => col.removeEventListener('mousemove', this.takePlace));
-    this.columns.forEach((col) => col.removeEventListener('mouseleave', this.removePlace));
-    document.removeEventListener('mouseup', this.dragFinish);
   }
 }

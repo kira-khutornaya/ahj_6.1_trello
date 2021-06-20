@@ -71,11 +71,10 @@ export default class CardManager {
   }
 
   removeItem(event) {
-    const itemText = event.target.closest('.cardmanager-list__item').textContent;
+    const itemText = event.target.closest('.cardmanager-list__item').textContent.trim();
     const currentCol = event.target.closest('.cardmanager__col').querySelector('.cardmanager-col__list');
     const colIndex = this.columns.findIndex((col) => col === currentCol);
     const itemIndex = this.cards[colIndex].findIndex((item) => item === itemText);
-    // console.log(itemIndex);
     this.cards[colIndex].splice(itemIndex, 1);
     this.renderingItem();
   }
@@ -128,14 +127,13 @@ export default class CardManager {
     for (let i = 0; i < this.columns.length; i += 1) {
       const cardElements = this.columns[i].querySelectorAll('.cardmanager-list__item');
       for (const card of cardElements) {
-        this.cards[i].push(card.textContent);
+        this.cards[i].push(card.textContent.trim());
       }
     }
   }
 
   fromLocalStorage() {
     if (localStorage.cards) this.cards = JSON.parse(localStorage.getItem('cards'));
-    else this.cards = [[], [], []];
     this.renderingItem();
   }
 
