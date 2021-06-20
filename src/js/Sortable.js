@@ -32,6 +32,7 @@ export default class Sortable {
     this.draggedElement.style.left = `${event.pageX - this.draggedX}px`;
     this.draggedElement.style.top = `${event.pageY - this.draggedY}px`;
   }
+
   onFinishDrag(event) {
     if (!this.draggedElement) return;
     if (!event.target.closest('.cardmanager-col__list')) {
